@@ -2,13 +2,16 @@ package com.example.hospitalreview.service;
 
 import com.example.hospitalreview.domain.Hospital;
 import com.example.hospitalreview.domain.Review;
+import com.example.hospitalreview.domain.dto.HospitalResponse;
 import com.example.hospitalreview.domain.dto.ReviewCreateRequest;
 import com.example.hospitalreview.domain.dto.ReviewCreateResponse;
 import com.example.hospitalreview.repository.HospitalRepository;
 import com.example.hospitalreview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -44,7 +47,19 @@ public class ReviewService {
     public Review getReview(Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("해당 아이디가 없습니다."));
-
         return review;
+    }
+    public List<HospitalResponse> findAllByHospitalId(Long hospitalId) {
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id가 없습니다."));
+        List<HospitalResponse> reviewResponses = reviewRepository.findByHospital(hospital)
+                .stream().map(review -> HospitalResponse.builder()
+                        .id(review.getId())
+                        .hospital_name(hospital.getHospital_name())
+                        .road_name_address(hospital.getRoad_name_address())
+                        .content(review.getContent())
+                        .username(review.getUsername())
+                        .build()).collect(Collectors.toList());
+        return reviewResponses;
     }
 }

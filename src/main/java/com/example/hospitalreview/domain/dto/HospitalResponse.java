@@ -1,22 +1,20 @@
-package com.example.hospitalreview.domain;
+package com.example.hospitalreview.domain.dto;
 
+import com.example.hospitalreview.domain.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
-public class Hospital {
-    @Id
-
+public class HospitalResponse {
     private Long id;
     private String hospital_name;
     private String road_name_address;
+    private String content;
+    private String title;
+    private String username;
 }
